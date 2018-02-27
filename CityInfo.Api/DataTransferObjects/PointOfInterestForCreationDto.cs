@@ -1,9 +1,15 @@
-﻿namespace CityInfo.Api.DataTransferObjects
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CityInfo.Api.DataTransferObjects
 {
     public class PointOfInterestForCreationDto
     {
+        [Required(ErrorMessage = "You should provide a name value")]
+        [MaxLength(50)]
         public string Name { get; set; }
 
+        [Required]
+        [MaxLength(200)]
         public string Description { get; set; }
     }
 }

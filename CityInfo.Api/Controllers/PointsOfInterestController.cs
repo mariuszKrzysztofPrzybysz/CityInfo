@@ -2,6 +2,7 @@
 using System.Linq;
 using CityInfo.Api.DataStores;
 using CityInfo.Api.DataTransferObjects;
+using System;
 
 namespace CityInfo.Api.Controllers
 {
@@ -43,6 +44,16 @@ namespace CityInfo.Api.Controllers
             if (pointOfInterest == null)
             {
                 return BadRequest();
+            }
+
+            if (pointOfInterest.Name.Equals(pointOfInterest.Description, StringComparison.OrdinalIgnoreCase))
+            {
+                ModelState.AddModelError("Description", "The provided description should be different from the name");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
             }
 
             var city = CitiesDataStore.Current.Cities
