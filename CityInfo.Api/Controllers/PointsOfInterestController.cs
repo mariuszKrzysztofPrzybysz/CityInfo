@@ -46,7 +46,7 @@ namespace CityInfo.Api.Controllers
                 return BadRequest();
             }
 
-            if (pointOfInterest.Name.Equals(pointOfInterest.Description, StringComparison.OrdinalIgnoreCase))
+            if ((pointOfInterest.Name ?? string.Empty).Equals(pointOfInterest.Description, StringComparison.OrdinalIgnoreCase))
             {
                 ModelState.AddModelError("Description", "The provided description should be different from the name");
             }
