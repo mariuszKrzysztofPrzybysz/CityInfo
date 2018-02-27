@@ -3,6 +3,7 @@ using System.Linq;
 using CityInfo.Api.DataStores;
 using CityInfo.Api.DataTransferObjects;
 using System;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace CityInfo.Api.Controllers
 {
@@ -113,6 +114,56 @@ namespace CityInfo.Api.Controllers
 
             pointOfInterestFromStore.Name = pointOfInterest.Name;
             pointOfInterestFromStore.Description = pointOfInterest.Description;
+
+            return NoContent();
+        }
+
+        [HttpPatch("{cityId}/pointsOfInterest/{id}")]
+        public IActionResult PartiallyUpdatePointOfInterest(int cityId, int id,
+            [FromBody] JsonPatchDocument<PointOfInterestForUpdateDto> patchDoc)
+        {
+            if (patchDoc == null)
+            {
+                return BadRequest();
+            }
+
+            var pointFromInterestFromStore = CitiesDataStore.Current.Cities
+                .FirstOrDefault(c => c.Id == cityId)
+                ?.PointsOfInterest
+                .FirstOrDefault(p => p.Id == id);
+
+            if (pointFromInterestFromStore == null)
+            {
+                return NotFound();
+            }
+
+            var pointOfInterestToPatch = new PointOfInterestForUpdateDto
+            {
+                Name = pointFromInterestFromStore.Name,
+                Description = pointFromInterestFromStore.Description
+            };
+
+            patchDoc.ApplyTo(pointOfInterestToPatch, ModelState);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if ((pointOfInterestToPatch.Name ?? string.Empty).Equals(pointOfInterestToPatch.Description, StringComparison.OrdinalIgnoreCase))
+            {
+                ModelState.AddModelError("Description", "The provided description should be different from the name");
+            }
+
+            TryValidateModel(pointOfInterestToPatch);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            pointFromInterestFromStore.Name = pointOfInterestToPatch.Name;
+            pointFromInterestFromStore.Description = pointOfInterestToPatch.Description;
 
             return NoContent();
         }
