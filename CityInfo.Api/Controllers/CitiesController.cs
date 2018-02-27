@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CityInfo.Api.DataStores;
 
 namespace CityInfo.Api.Controllers
 {
@@ -11,12 +12,10 @@ namespace CityInfo.Api.Controllers
     {
         [HttpGet]
         public JsonResult GetCities()
-        {
-            return new JsonResult(new List<object>()
-            {
-                new {Id=1, Name="New York City"},
-                new {Id=2, Name="Antwerp"}
-            });
-        }
+            => new JsonResult(CitiesDataStore.Current.Cities);
+
+        [HttpGet("{id}")]
+        public JsonResult GetCity(int id)
+            => new JsonResult(CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == id));
     }
 }
