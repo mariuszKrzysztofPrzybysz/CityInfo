@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using CityInfo.Api.Interfaces;
+using CityInfo.Api.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +16,12 @@ namespace CityInfo.Api
             services.AddMvc()
                 .AddMvcOptions(options => options.OutputFormatters.Add(
                         new XmlDataContractSerializerOutputFormatter()));
+
+#if DEBUG
+            services.AddTransient<IMailService, LocalMailService>();
+#else
+            services.AddTransient<IMailService, CloudMailService>();
+#endif
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

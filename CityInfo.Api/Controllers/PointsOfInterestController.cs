@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CityInfo.Api.DataStores;
 using CityInfo.Api.DataTransferObjects;
+using CityInfo.Api.Services;
+using CityInfo.Api.Interfaces;
 
 namespace CityInfo.Api.Controllers
 {
@@ -12,10 +14,13 @@ namespace CityInfo.Api.Controllers
     public class PointsOfInterestController : Controller
     {
         private ILogger<PointsOfInterestController> _logger;
+        private IMailService _mailService;
 
-        public PointsOfInterestController(ILogger<PointsOfInterestController> logger)
+        public PointsOfInterestController(ILogger<PointsOfInterestController> logger,
+            IMailService mailService)
         {
             _logger = logger;
+            _mailService = mailService;
         }
 
         [HttpGet("{cityId}/pointsOfInterest")]
@@ -203,6 +208,9 @@ namespace CityInfo.Api.Controllers
             }
 
             cityFromStore.PointsOfInterest.Remove(pointOfInterestFromStore);
+
+            _mailService.Send("Point of interest deleted", $"Point of interest {pointOfInterestFromStore.Name} " +
+                $"with id {pointOfInterestFromStore.Id} was deleted");
 
             return NoContent();
         }
