@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CityInfo.Api.DataStores;
 using CityInfo.Api.DataTransferObjects;
-using CityInfo.Api.Services;
 using CityInfo.Api.Interfaces;
 
 namespace CityInfo.Api.Controllers
