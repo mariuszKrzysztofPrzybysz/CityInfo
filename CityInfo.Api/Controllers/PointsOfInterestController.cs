@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
 using System.Linq;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using CityInfo.Api.DataStores;
 using CityInfo.Api.DataTransferObjects;
-using System;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.Extensions.Logging;
 
 namespace CityInfo.Api.Controllers
 {
