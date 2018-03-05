@@ -12,7 +12,6 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "defaultConnection": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=CityInfoDatabase;Persist Security Info=True;User ID=mprzybysz;Password=zaq1ZAQ!",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
