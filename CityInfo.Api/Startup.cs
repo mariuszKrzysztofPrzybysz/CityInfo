@@ -1,8 +1,10 @@
-﻿using CityInfo.Api.Interfaces;
+﻿using CityInfo.Api.DbContexts;
+using CityInfo.Api.Interfaces;
 using CityInfo.Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -38,6 +40,8 @@ namespace CityInfo.Api
 #else
             services.AddTransient<IMailService, CloudMailService>();
 #endif
+            var connectionString = Startup.Configuration["connectionStrings:defaultConnection"];
+            services.AddDbContext<CityInfoContext>(options => options.UseSqlServer(connectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
